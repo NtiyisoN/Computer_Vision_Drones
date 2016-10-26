@@ -1,6 +1,7 @@
 '''
 Sample code taken from creat-tabu.blogspot.ro
-All credit to owner
+Modified Sample code and written for new purpose
+Author: Zachary Moore github.com/zsmoore
 '''
 
 
