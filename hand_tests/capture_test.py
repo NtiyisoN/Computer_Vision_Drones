@@ -45,6 +45,8 @@ drawing = np.zeros(img.shape, np.uint8)
 cv2.drawContours(drawing, [cnt], 0, (0, 255, 0), 2)
 cv2.drawContours(drawing, [hull], 0, (0, 0, 255), 2)
 
+cv2.imshow("sample", drawing)
+cv2.waitKey(0)
 
 #find defects
 hull = cv2.convexHull(cnt, returnPoints = False)
