@@ -21,16 +21,17 @@ while(cap.isOpened()):
 gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 blur = cv2.GaussianBlur(gray,(5,5),0)
 
-ret, thresh1 = cv2.threshhold(blur, 70, 255, cv2.THRESH_BINARY_INV + cv2,THRESH_OTSU)
+ret, thresh1 = cv2.threshold(blur, 70, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
 
-#find countours
-contours, hierarchy = cv2.findContours(thresh1, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+#find contours
+image, contours, hierarchy = cv2.findContours(thresh1, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
 
 #get largest contour
+max_area = 0
 for i in range(len(contours)):
-    cnt = countours[i]
-    area = cv2.countourArea(cnt)
+    cnt = contours[i]
+    area = cv2.contourArea(cnt)
     if area > max_area:
         max_area = area
         ci = i
@@ -58,7 +59,7 @@ for i in range(defects.shape[0]):
     start = tuple(cnt[s][0])
     end = tuple(cnt[e][0])
     far = tuple(cnt[f][0])
-    dist = cv2.pointPolygonTest(cnt, centr, True)
+    dist = cv2.pointPolygonTest(cnt, (0,0), True)
     cv2.line(img, start, end, [0, 255, 0], 2)
     cv2.circle(img, far, 5, [0, 0, 255], -1)
     print(i)
