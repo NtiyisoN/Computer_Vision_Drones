@@ -1,0 +1,2 @@
+
+-DCATKIN_DEVEL_PREFIX=/home/zsmoore/programming/CSE321/Computer_Vision_Drones/drone_signal/catkin_ws/devel -DCMAKE_INSTALL_PREFIX=/home/zsmoore/programming/CSE321/Computer_Vision_Drones/drone_signal/catkin_ws/install -G Unix Makefiles
