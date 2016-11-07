@@ -1,0 +1,17 @@
+Release Version:2.4.1
+Release Date:2015.11.17
+
+Added:
+1. Added the API (setRCControlGimbalDirection, getRCControlGimbalDirection)in DJIRemoteController for changing the gimbal direction controlled by the top left wheel for Inspire 1.
+
+Bugs fixed:
+1. Solved the bug of wrong current value of battery.
+2. Corrected the return of getDJIGimbalCapacity API for Phantom3 and Inspire 1.
+3. Corrected the errors for the activation for battery.
+4. Changed the place for downloaded files by fetchMediaData API to a proper one.
+
+Sample Codes:
+Added:
+1. Added the demos for setRCControlGimbalDirection and getRCControlGimbalDirection for Inspire 1 in RemoteControllerDemoActivity
+2. Added the demo for rotation to 30, 60, 120 degree to the north of the earth in GsProtocolJoystickDemoActivity3. Added the demos for set video standard and get video standard in CameraProtocolDemoActivity
+3. Added the demo for set video standard and get video standard in CameraProtocolDemoActivity.4. Added the demo for showing SDCard remainSize and remainCaptureCount in the bottom left corner of Playback Mode in CameraProtocolDemoActivity.5. Added the demo for setting the Resolution and Frame Rate for the video in CameraProtocolDemoActivity.
