@@ -1,13 +1,5 @@
 package com.zachary_moore.dji_gesture_control;
 
-import android.content.Context;
-import android.hardware.Camera;
-import android.hardware.camera2.CameraAccessException;
-import android.hardware.camera2.CameraCaptureSession;
-import android.hardware.camera2.CameraCharacteristics;
-import android.hardware.camera2.CameraDevice;
-import android.hardware.camera2.CameraManager;
-import android.media.MediaRecorder;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
@@ -15,13 +7,10 @@ import android.view.View;
 import android.widget.TextView;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.StringReader;
 import java.util.concurrent.TimeUnit;
 
-import dji.sdk.flightcontroller.DJIFlightController;
 import dji.sdk.mobilerc.DJIMobileRemoteController;
-import dji.sdk.sdkmanager.DJISDKManager;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -32,6 +21,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
 
         _masterControl = new DJIMobileRemoteController();
 
