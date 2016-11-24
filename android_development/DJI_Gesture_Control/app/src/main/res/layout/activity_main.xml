@@ -10,15 +10,6 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.zachary_moore.dji_gesture_control.MainActivity">
 
-    <Button
-        android:text="Send Commands"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/sendCommand"
-        android:layout_marginBottom="54dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
-
     <TextView
         android:text="Commands Identified"
         android:layout_width="wrap_content"
@@ -26,19 +17,49 @@
         android:id="@+id/mainTitle"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentStart="true" />
 
-    <ScrollView
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
         android:layout_below="@+id/mainTitle"
-        android:layout_alignParentStart="true">
+        android:layout_above="@+id/sendCommand"
+        android:scrollIndicators="right"
+        android:scrollbars="vertical">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:text="Sample Commands"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical" />
-    </ScrollView>
+            android:layout_below="@+id/mainTitle"
+            android:layout_alignParentStart="true"
+            android:id="@+id/commandList"
+            android:layout_alignParentEnd="true"
+            android:scrollbars="vertical"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:fontFamily="courier"
+            android:textAlignment="viewStart"
+            android:textSize="18sp"
+            android:scrollHorizontally="true"
+            android:scrollbarAlwaysDrawHorizontalTrack="false" />
+    </FrameLayout>
+
+    <Button
+        android:text="Capture Commands"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/capture"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="16dp" />
+
+    <Button
+        android:text="Send Commands"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/sendCommand"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true" />
 
 </RelativeLayout>
