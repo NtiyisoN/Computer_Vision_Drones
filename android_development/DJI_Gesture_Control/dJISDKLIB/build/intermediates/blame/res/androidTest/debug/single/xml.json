@@ -1,5 +1,9 @@
 [
     {
+        "merged": "/Users/noahpoczciwinski/Documents/software-development/drone-project/android_development/DJI_Gesture_Control/dJISDKLIB/build/intermediates/res/merged/androidTest/debug/xml/accessory_filter.xml",
+        "source": "/Users/noahpoczciwinski/Documents/software-development/drone-project/android_development/DJI_Gesture_Control/dJISDKLIB/build/intermediates/bundles/debug/res/xml/accessory_filter.xml"
+    },
+    {
         "merged": "/home/zsmoore/programming/CSE321/Computer_Vision_Drones/android_development/DJI_Gesture_Control/dJISDKLIB/build/intermediates/res/merged/androidTest/debug/xml/accessory_filter.xml",
         "source": "/home/zsmoore/programming/CSE321/Computer_Vision_Drones/android_development/DJI_Gesture_Control/dJISDKLIB/build/intermediates/bundles/debug/res/xml/accessory_filter.xml"
     }
