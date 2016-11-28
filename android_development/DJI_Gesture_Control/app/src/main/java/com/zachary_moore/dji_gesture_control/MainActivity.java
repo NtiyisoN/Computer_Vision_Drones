@@ -181,7 +181,7 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
 */
 
 
-    public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame){
+    public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
         mRgba = inputFrame.gray();
         Mat rep2 = new Mat();
         Mat rep3 = inputFrame.gray();
@@ -191,13 +191,16 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
 
         Imgproc i = new Imgproc();
 
-        i.GaussianBlur(mRgba, mRgba, new Size(5,5), 0, 0, 0);
-        double thresh = i.threshold(mRgba, rep2, 45, 255, i.THRESH_BINARY);
+        i.GaussianBlur(mRgba, mRgba, new Size(5, 5), 0, 0, 0);
+        double thresh = i.threshold(mRgba, rep2, 45, 255, i.THRESH_BINARY_INV);
+
+        return rep2;
+        /*
         i.erode(rep2, rep2, new Mat(), new Point(-1,-1), 2);
         i.dilate(rep2, rep2, new Mat(), new Point(-1,-1), 2);
 
         Scalar color = new Scalar(255, 0,255);
-        Scalar color2 = new Scalar(255, 255,0);
+
 
         i.findContours(rep2, cont, contours, i.RETR_EXTERNAL, i.CHAIN_APPROX_SIMPLE);
         int maxCont = 0;
@@ -206,8 +209,12 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
                 maxCont = h;
             }
         }
-        i.drawContours(mRgba,cont, maxCont, color, 2, 15, new Mat(), 0, new Point(0,0));
-
+        /*
+        for(int  q = 0; q < cont.size(); q++) {
+            i.drawContours(mRgba, cont, q, color, 2, 15, new Mat(), 0, new Point(0, 0));
+        }
+        */
+        //i.drawContours(mRgba, cont, maxCont, color, 2, 15, new Mat(), 0, new Point(0, 0));
 
         //MatOfInt4 defect = new MatOfInt4();
         //MatOfPoint hullPointMat = new MatOfPoint();
@@ -250,7 +257,7 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
 
             }
         }
-        */
+
 
 
         //ArrayList<MatOfPoint> single = new ArrayList<MatOfPoint>();
@@ -260,7 +267,9 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
 
 
         return mRgba;
+    */
     }
+
     public void onCameraViewStarted(int width, int height){
         mRgba = new Mat(height, width, CvType.CV_8UC4);
 
