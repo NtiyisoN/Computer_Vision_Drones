@@ -1,5 +1,6 @@
 package com.zachary_moore.dji_gesture_control;
 
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 
 import java.io.BufferedReader;
 import java.io.StringReader;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
@@ -32,7 +34,16 @@ import org.opencv.android.OpenCVLoader;
 import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
+import org.opencv.core.MatOfInt;
+import org.opencv.core.MatOfInt4;
+import org.opencv.core.MatOfPoint;
+import org.opencv.core.Point;
+import org.opencv.core.Scalar;
+import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
+import org.opencv.video.BackgroundSubtractor;
+import org.opencv.video.BackgroundSubtractorKNN;
+import org.opencv.video.BackgroundSubtractorMOG2;
 
 public class MainActivity extends AppCompatActivity implements CameraBridgeViewBase.CvCameraViewListener2 {
 
@@ -43,6 +54,7 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
     private CameraBridgeViewBase mOpenCvCameraView;
     private boolean mIsJavaCamera = true;
     private MenuItem mItemSwitchCamera = null;
+    private BackgroundSubtractorMOG2 mBG;
 
     //orientation stuff
     Mat mRgba;
@@ -125,13 +137,80 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
 
     public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame){
         mRgba = inputFrame.gray();
+        Mat rep2 = new Mat();
+        Mat rep3 = inputFrame.gray();
+        Mat contours = new Mat();
+        List<MatOfPoint> cont = new ArrayList<MatOfPoint>();
+        Mat finalCon = new Mat();
 
-        //Core.transpose(mRgba, mRgbaT);
-        //Imgproc.resize(mRgbaT, mRgbaF, mRgbaF.size(),0,0,0);
-        //Core.flip(mRgbaF, mRgba, 1);
         Imgproc i = new Imgproc();
-        i.threshold(mRgba,mRgba, 70, 255, i.THRESH_BINARY);
-        //i.adaptiveThreshold(mRgba,mRgba, 255, i.ADAPTIVE_THRESH_MEAN_C, i.THRESH_BINARY_INV,11,2);
+
+        i.GaussianBlur(mRgba, mRgba, new Size(5,5), 0, 0, 0);
+        double thresh = i.threshold(mRgba, rep2, 45, 255, i.THRESH_BINARY);
+        i.erode(rep2, rep2, new Mat(), new Point(-1,-1), 2);
+        i.dilate(rep2, rep2, new Mat(), new Point(-1,-1), 2);
+
+        Scalar color = new Scalar(255, 0,255);
+        Scalar color2 = new Scalar(255, 255,0);
+
+        i.findContours(rep2, cont, contours, i.RETR_EXTERNAL, i.CHAIN_APPROX_SIMPLE);
+        int maxCont = 0;
+        for(int h = 0; h < cont.size(); h ++){
+            if(i.contourArea(cont.get(h)) > i.contourArea(cont.get(maxCont))){
+                maxCont = h;
+            }
+        }
+        i.drawContours(mRgba,cont, maxCont, color, 2, 15, new Mat(), 0, new Point(0,0));
+
+
+        //MatOfInt4 defect = new MatOfInt4();
+        //MatOfPoint hullPointMat = new MatOfPoint();
+
+
+        //NO IDEA HOW TO DO THIS
+        /*
+        ArrayList<MatOfInt> hullI = new ArrayList<MatOfInt>();
+        ArrayList<MatOfInt4> defs = new ArrayList<MatOfInt4>();
+        for(int c = 0; c < cont.size(); c ++){
+            MatOfInt temp = new MatOfInt();
+
+            i.convexHull(cont.get(c), temp, false);
+
+            hullI.add(c, temp);
+            if(hullI.size() > 3){
+                MatOfInt4 temp2 = new MatOfInt4();
+                i.convexityDefects(cont.get(c), temp, temp2);
+                defs.add(c, temp2);
+            }
+
+        }
+
+        for(int f = 0; f < cont.size(); f ++){
+            for(MatOfInt4 tempMat : defs){
+                double depth = tempMat.get(3, 0)[0] / 256;
+                if(depth > 0){
+                    int start = (int)tempMat.get(0,0)[0];
+                    Point pStart= new Point(cont.get(f).get(start,0));
+                    int end = (int)tempMat.get(1,0)[0];
+                    Point pEnd = new Point(cont.get(f).get(end,0));
+                    int far = (int)tempMat.get(2,0)[0];
+                    Point pFar = new Point(cont.get(f).get(far,0));
+
+                    i.line(mRgba, pStart, pEnd, color, 1);
+                    i.line(mRgba, pStart, pFar, color, 1);
+                    i.line(mRgba, pEnd, pFar, color, 1);
+                    i.circle(mRgba, pFar, 4, color, 2);
+                }
+
+            }
+        }
+        */
+
+
+        //ArrayList<MatOfPoint> single = new ArrayList<MatOfPoint>();
+        //single.add(0, hullPointMat);
+
+        //i.drawContours(mRgba, single, 0, color, 2, 15, new Mat(), 0, new Point(0,0));
 
 
         return mRgba;
