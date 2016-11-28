@@ -194,8 +194,8 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
         i.GaussianBlur(mRgba, mRgba, new Size(5, 5), 0, 0, 0);
         double thresh = i.threshold(mRgba, rep2, 45, 255, i.THRESH_BINARY_INV);
 
-        return rep2;
-        /*
+        //return rep2;
+
         i.erode(rep2, rep2, new Mat(), new Point(-1,-1), 2);
         i.dilate(rep2, rep2, new Mat(), new Point(-1,-1), 2);
 
@@ -214,60 +214,39 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
             i.drawContours(mRgba, cont, q, color, 2, 15, new Mat(), 0, new Point(0, 0));
         }
         */
-        //i.drawContours(mRgba, cont, maxCont, color, 2, 15, new Mat(), 0, new Point(0, 0));
+        i.drawContours(mRgba, cont, maxCont, color, 2, 15, new Mat(), 0, new Point(0, 0));
 
-        //MatOfInt4 defect = new MatOfInt4();
-        //MatOfPoint hullPointMat = new MatOfPoint();
-
-
-        //NO IDEA HOW TO DO THIS
-        /*
-        ArrayList<MatOfInt> hullI = new ArrayList<MatOfInt>();
-        ArrayList<MatOfInt4> defs = new ArrayList<MatOfInt4>();
-        for(int c = 0; c < cont.size(); c ++){
-            MatOfInt temp = new MatOfInt();
-
-            i.convexHull(cont.get(c), temp, false);
-
-            hullI.add(c, temp);
-            if(hullI.size() > 3){
-                MatOfInt4 temp2 = new MatOfInt4();
-                i.convexityDefects(cont.get(c), temp, temp2);
-                defs.add(c, temp2);
-            }
-
-        }
-
-        for(int f = 0; f < cont.size(); f ++){
-            for(MatOfInt4 tempMat : defs){
-                double depth = tempMat.get(3, 0)[0] / 256;
-                if(depth > 0){
-                    int start = (int)tempMat.get(0,0)[0];
-                    Point pStart= new Point(cont.get(f).get(start,0));
-                    int end = (int)tempMat.get(1,0)[0];
-                    Point pEnd = new Point(cont.get(f).get(end,0));
-                    int far = (int)tempMat.get(2,0)[0];
-                    Point pFar = new Point(cont.get(f).get(far,0));
-
-                    i.line(mRgba, pStart, pEnd, color, 1);
-                    i.line(mRgba, pStart, pFar, color, 1);
-                    i.line(mRgba, pEnd, pFar, color, 1);
-                    i.circle(mRgba, pFar, 4, color, 2);
-                }
-
-            }
-        }
+        MatOfPoint hullPointMat = new MatOfPoint();
+        MatOfInt hull = new MatOfInt();
+        i.convexHull(cont.get(maxCont), hull, false);
+        MatOfInt4 defects = new MatOfInt4();
+        i.convexityDefects(cont.get(maxCont), hull, defects);
 
 
 
-        //ArrayList<MatOfPoint> single = new ArrayList<MatOfPoint>();
-        //single.add(0, hullPointMat);
+
+        int start = (int)defects.get(0,0)[0];
+        Point pStart= new Point(cont.get(maxCont).get(start,0));
+        int end = (int)defects.get(1,0)[0];
+        Point pEnd = new Point(cont.get(maxCont).get(end,0));
+        int far = (int)defects.get(2,0)[0];
+        Point pFar = new Point(cont.get(maxCont).get(far,0));
+
+        i.line(mRgba, pStart, pEnd, color, 15);
+        i.line(mRgba, pStart, pFar, color, 15);
+        i.line(mRgba, pEnd, pFar, color, 15);
+        i.circle(mRgba, pFar, 4, color, 15);
+
+
+
+
+
 
         //i.drawContours(mRgba, single, 0, color, 2, 15, new Mat(), 0, new Point(0,0));
 
 
         return mRgba;
-    */
+
     }
 
     public void onCameraViewStarted(int width, int height){
