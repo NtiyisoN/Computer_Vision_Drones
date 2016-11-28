@@ -223,13 +223,14 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
         i.convexityDefects(cont.get(maxCont), hull, defects);
 
 
+        System.out.println(defects);
 
-        for(int j = 0; j < 4; j++) {
-            int start = (int) defects.get(0, 0)[j];
+        for(int j = 0; j < defects.toList().size(); j++) {
+            int start = (int) defects.get(0, j)[0];
             Point pStart = new Point(cont.get(maxCont).get(start, 0));
-            int end = (int) defects.get(1, 0)[j];
+            int end = (int) defects.get(1, j)[0];
             Point pEnd = new Point(cont.get(maxCont).get(end, 0));
-            int far = (int) defects.get(2, 0)[j];
+            int far = (int) defects.get(2, j)[0];
             Point pFar = new Point(cont.get(maxCont).get(far, 0));
 
             i.line(mRgba, pStart, pEnd, color, 15);
