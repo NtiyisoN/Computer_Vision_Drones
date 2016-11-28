@@ -9,6 +9,7 @@ import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 
@@ -81,7 +82,9 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
         Log.i(TAG, "called onCreate");
         super.onCreate(savedInstanceState);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
+        getSupportActionBar().hide();
 
         _masterControl = new DJIMobileRemoteController();
         mOpenCvCameraView = (JavaCameraView) findViewById(R.id.main_camera);
@@ -89,45 +92,9 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
         mOpenCvCameraView.setVisibility(SurfaceView.VISIBLE);
         mOpenCvCameraView.setCvCameraViewListener(this);
 
-        TextView t = (TextView) this.findViewById(R.id.commandList);
-        t.setMovementMethod(new ScrollingMovementMethod());
-
-        this.findViewById(R.id.sendCommand).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                parseAndCommand();
-            }
-        });
-
-        this.findViewById(R.id.capture).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                captureGestures();
-            }
-        });
-
-
-        /*
-        System.out.println("Number of cameras: " + Camera.getNumberOfCameras());
-
-        try {
-            c = Camera.open(1); // attempt to get a Camera instance
-            System.out.println("Successfully opened camera!");
-        }
-        catch (Exception e){
-            // Camera is not available (in use or does not exist)
-            System.out.println("Failed to open camera!");
-        }
-
-
-        SurfaceView pv = (SurfaceView) findViewById(R.id.videoFeed);
-        SurfaceHolder surfaceHolder = pv.getHolder();
-        surfaceHolder.addCallback(this);
-        surfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
-        */
 
     }
-
+/*
     public void parseAndCommand() {
 
         TextView commands = (TextView) findViewById(R.id.commandList);
@@ -153,27 +120,27 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
 
 
     }
-
-    public void captureGestures() {
-
-        //how do we open a camera this is insane
-
-    }
+*/
 
 
     public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame){
-        mRgba = inputFrame.rgba();
+        mRgba = inputFrame.gray();
 
-        Core.transpose(mRgba, mRgbaT);
-        Imgproc.resize(mRgbaT, mRgbaF, mRgbaF.size(),0,0,0);
-        Core.flip(mRgbaF, mRgba, 1);
+        //Core.transpose(mRgba, mRgbaT);
+        //Imgproc.resize(mRgbaT, mRgbaF, mRgbaF.size(),0,0,0);
+        //Core.flip(mRgbaF, mRgba, 1);
+        Imgproc i = new Imgproc();
+        i.threshold(mRgba,mRgba, 70, 255, i.THRESH_BINARY);
+        //i.adaptiveThreshold(mRgba,mRgba, 255, i.ADAPTIVE_THRESH_MEAN_C, i.THRESH_BINARY_INV,11,2);
+
 
         return mRgba;
     }
     public void onCameraViewStarted(int width, int height){
         mRgba = new Mat(height, width, CvType.CV_8UC4);
-        mRgbaF = new Mat(height,width, CvType.CV_8UC4);
-        mRgbaT = new Mat(height, width, CvType.CV_8UC4);
+
+        //mRgbaF = new Mat(height,width, CvType.CV_8UC4);
+        //mRgbaT = new Mat(width, width, CvType.CV_8UC4);
     }
 
     public void onCameraViewStopped(){
@@ -209,39 +176,4 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
         }
     }
 
-    /*
-    @Override
-    public void surfaceCreated(SurfaceHolder holder) {
-
-        pv = (SurfaceView) findViewById(R.id.videoFeed);
-
-        System.out.println("camera: " + c);
-        System.out.println("preview: " + pv);
-
-        try {
-            c.setPreviewDisplay(pv.getHolder());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i1, int i2) {
-
-
-        Camera.Parameters params = c.getParameters();
-        List<Camera.Size> sizes = params.getSupportedPreviewSizes();
-        Camera.Size selected = sizes.get(0);
-        params.setPreviewSize(selected.width,selected.height);
-        c.setParameters(params);
-
-        c.setDisplayOrientation(270);
-        c.startPreview();
-    }
-
-    @Override
-    public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
-
-    }
-*/
 }
