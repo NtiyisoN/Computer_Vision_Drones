@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
     Mat mRgba;
     Mat mRgbaF;
     Mat mRgbaT;
-
+/*
     //DJI stuff
     private DJIBaseProduct mProduct;
     private DJISDKManager.DJISDKManagerCallback mDJISDKManagerCallback = new DJISDKManager.DJISDKManagerCallback(){
@@ -104,6 +104,7 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
             //notifyStatusChange();
         }
     };
+    */
     static{System.loadLibrary("opencv_java3");}
 
     private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
@@ -147,7 +148,7 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
         mOpenCvCameraView.setVisibility(SurfaceView.VISIBLE);
         mOpenCvCameraView.setCvCameraViewListener(this);
 
-        DJISDKManager.getInstance().initSDKManager(this, mDJISDKManagerCallback);
+        //DJISDKManager.getInstance().initSDKManager(this, mDJISDKManagerCallback);
 
 
     }
