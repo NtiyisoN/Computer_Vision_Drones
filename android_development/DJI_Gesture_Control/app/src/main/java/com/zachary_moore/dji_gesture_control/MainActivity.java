@@ -1,6 +1,8 @@
 package com.zachary_moore.dji_gesture_control;
 
 import android.graphics.Color;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
@@ -22,9 +24,14 @@ import java.util.concurrent.TimeUnit;
 
 import java.util.List;
 
+import dji.common.error.DJIError;
+import dji.common.error.DJISDKError;
+import dji.sdk.base.DJIBaseProduct;
 import dji.sdk.mobilerc.DJIMobileRemoteController;
+import dji.sdk.sdkmanager.DJISDKManager;
 
 import android.hardware.Camera;
+import android.widget.Toast;
 
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.CameraBridgeViewBase;
@@ -61,6 +68,42 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
     Mat mRgbaF;
     Mat mRgbaT;
 
+    //DJI stuff
+    private DJIBaseProduct mProduct;
+    private DJISDKManager.DJISDKManagerCallback mDJISDKManagerCallback = new DJISDKManager.DJISDKManagerCallback(){
+        @Override
+        public void onGetRegisteredResult(DJIError error){
+            Log.d(TAG, error==null? "Success" : error.getDescription());
+            if(error == DJISDKError.REGISTRATION_SUCCESS){
+                DJISDKManager.getInstance().startConnectionToProduct();
+                Handler handler = new Handler(Looper.getMainLooper());
+                handler.post(new Runnable(){
+                    @Override
+                    public void run(){
+                        Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+            else{
+                Handler handler = new Handler(Looper.getMainLooper());
+                handler.post(new Runnable(){
+                    @Override
+                    public void run(){
+                        Toast.makeText(getApplicationContext(), "fail register", Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+            Log.e("TAG", error.toString());
+        }
+        @Override
+        public void onProductChanged(DJIBaseProduct oldProduct, DJIBaseProduct newProduct){
+            mProduct = newProduct;
+            if(mProduct != null){
+                //mProduct.setDJIBaseProductListener(mDJIBaseProductListener);
+            }
+            //notifyStatusChange();
+        }
+    };
     static{System.loadLibrary("opencv_java3");}
 
     private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
@@ -81,8 +124,8 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
         }
     };
 
-    Camera c;
-    SurfaceView pv;
+    //Camera c;
+    //SurfaceView pv;
 
 
     public MainActivity() {
@@ -103,6 +146,8 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
 
         mOpenCvCameraView.setVisibility(SurfaceView.VISIBLE);
         mOpenCvCameraView.setCvCameraViewListener(this);
+
+        DJISDKManager.getInstance().initSDKManager(this, mDJISDKManagerCallback);
 
 
     }
