@@ -217,14 +217,40 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
         i.drawContours(mRgba, cont, maxCont, color, 2, 15, new Mat(), 0, new Point(0, 0));
 
         MatOfPoint hullPointMat = new MatOfPoint();
+
+        //hull indices of points in cont.get(maxCont) max contour
         MatOfInt hull = new MatOfInt();
         i.convexHull(cont.get(maxCont), hull, false);
+
+        List<Integer> hullList = hull.toList();
+        for(int y = 0; y < hull.toList().size(); y ++){
+            double[] point = cont.get(maxCont).get(0, hullList.get(y));
+
+        }
+
         MatOfInt4 defects = new MatOfInt4();
         i.convexityDefects(cont.get(maxCont), hull, defects);
 
+        for(int y = 0; y < defects.rows(); y ++){
 
-        System.out.println(defects);
+            if((double)defects.get(y,0)[3] / 256 <10) {
+                int start = (int) defects.get(y, 0)[0];
+                Point pStart = new Point(cont.get(maxCont).get(start, 0));
+                int end = (int) defects.get(y, 0)[1];
+                Point pEnd = new Point(cont.get(maxCont).get(end, 0));
+                int far = (int) defects.get(y, 0)[2];
+                Point pFar = new Point(cont.get(maxCont).get(far, 0));
 
+                //i.line(mRgba, pStart, pEnd, color, 5);
+                //i.line(mRgba, pStart, pFar, color, 5);
+                //i.line(mRgba, pEnd, pFar, color, 5);
+                i.circle(mRgba, pFar, 4, color, 15);
+            }
+
+        }
+
+
+/*
         for(int j = 0; j < defects.toList().size(); j++) {
             int start = (int) defects.get(0, j)[0];
             Point pStart = new Point(cont.get(maxCont).get(start, 0));
@@ -240,7 +266,7 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
 
         }
 
-
+*/
 
 
         //i.drawContours(mRgba, single, 0, color, 2, 15, new Mat(), 0, new Point(0,0));
