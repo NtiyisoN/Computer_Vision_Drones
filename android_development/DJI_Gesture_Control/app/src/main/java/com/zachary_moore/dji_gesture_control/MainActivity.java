@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.SurfaceView;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +32,8 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
     private static final String TAG = "OCVSample::Activity";
     private CameraBridgeViewBase mOpenCvCameraView;
     Mat mRgba;
+    private int mSubsequent = 0;
+    private int mCommand = 0;
 
     static {
         System.loadLibrary("opencv_java3");
@@ -76,6 +79,16 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
 
     }
 
+    public void showToast(final String toast)
+    {
+        runOnUiThread(new Runnable() {
+            public void run()
+            {
+                Toast.makeText(MainActivity.this, toast, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
     public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
         mRgba = inputFrame.gray();
         Mat rep2 = new Mat();
@@ -118,7 +131,7 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
         for (int y = 1; y < defects.rows(); y++) {
 
             if ((double) defects.get(y, 0)[3] / 256 > 120) {
-                command++;
+
                 int start = (int) defects.get(y, 0)[0];
                 Point pStart = new Point(cont.get(maxCont).get(start, 0));
                 int end = (int) defects.get(y, 0)[1];
@@ -129,6 +142,7 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
                 //i.line(mRgba, pStart, pEnd, color, 5);
                 //i.line(mRgba, pStart, pFar, color, 5);
                 //i.line(mRgba, pEnd, pFar, color, 5);
+                command+=1;
                 i.circle(mRgba, pEnd, 4, color, 15);
 
             }
@@ -137,24 +151,90 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
 
         switch (command) {
             case 0:
+                if(mCommand == 0){
+                    mSubsequent += 1;
+                    if(mSubsequent == 20){
+                        showToast("stop");
+                        mSubsequent = 0;
+                    }
+                }
+                else{
+                    mSubsequent = 1;
+                    mCommand = 0;
+                }
                 //Stop
+
+                //showToast((Integer.toString(command)));
+
                 break;
 
 
             case 1:
                 //Down
+                //showToast("down");
+                //showToast((Integer.toString(command)));
+                if(mCommand == 1){
+                    mSubsequent += 1;
+                    if(mSubsequent == 20){
+                        showToast("down");
+                        mSubsequent = 0;
+                    }
+                }
+                else{
+                    mSubsequent = 1;
+                    mCommand = 1;
+                }
                 break;
 
             case 2:
                 //left
+                //showToast("left");
+                //showToast((Integer.toString(command)));
+                if(mCommand == 2){
+                    mSubsequent += 1;
+                    if(mSubsequent == 20){
+                        showToast("left");
+                        mSubsequent = 0;
+                    }
+                }
+                else{
+                    mSubsequent = 1;
+                    mCommand = 2;
+                }
                 break;
 
             case 3:
                 //right
+                //showToast("right");
+                //showToast((Integer.toString(command)));
+                if(mCommand == 3){
+                    mSubsequent += 1;
+                    if(mSubsequent == 20){
+                        showToast("right");
+                        mSubsequent = 0;
+                    }
+                }
+                else{
+                    mSubsequent = 1;
+                    mCommand = 3;
+                }
                 break;
 
             case 4:
                 //UP
+                //showToast("up");
+                //showToast((Integer.toString(command)));
+                if(mCommand == 4){
+                    mSubsequent += 1;
+                    if(mSubsequent == 20){
+                        showToast("Up");
+                        mSubsequent = 0;
+                    }
+                }
+                else{
+                    mSubsequent = 1;
+                    mCommand = 4;
+                }
                 break;
         }
 
