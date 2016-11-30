@@ -1,5 +1,10 @@
 package com.zachary_moore.dji_gesture_control;
 
+
+import android.content.Intent;
+import android.os.Handler;
+import android.os.Looper;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -7,6 +12,16 @@ import android.view.SurfaceView;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.net.SocketAddress;
+import java.net.SocketException;
+import java.net.SocketImpl;
+import java.net.SocketImplFactory;
+import java.security.Provider;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,15 +40,30 @@ import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLSocketFactory;
+
+import dji.common.error.DJIError;
+import dji.common.error.DJISDKError;
+import dji.sdk.base.DJIBaseComponent;
+import dji.sdk.base.DJIBaseProduct;
+import dji.sdk.flightcontroller.DJIFlightController;
+import dji.sdk.sdkmanager.DJISDKManager;
+
 public class MainActivity extends AppCompatActivity implements CameraBridgeViewBase.CvCameraViewListener2 {
 
 
     //opencv stuff
     private static final String TAG = "OCVSample::Activity";
     private CameraBridgeViewBase mOpenCvCameraView;
+    public static final String FLAG_CONNECTION_CHANGE = "SOMETHING CHANGED";
     Mat mRgba;
     private int mSubsequent = 0;
     private int mCommand = 0;
+    private DJIBaseProduct mProduct;
+    private DJIFlightController mcontrol;
 
     static {
         System.loadLibrary("opencv_java3");
@@ -60,8 +90,54 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
 
     public MainActivity() {
         Log.i(TAG, "Instantiated new" + this.getClass());
+
     }
 
+    private DJISDKManager.DJISDKManagerCallback mDJISDKManagerCallback;
+
+    private DJIBaseProduct.DJIBaseProductListener mDJIBaseProductListener = new DJIBaseProduct.DJIBaseProductListener() {
+
+        @Override
+        public void onComponentChange(DJIBaseProduct.DJIComponentKey key, DJIBaseComponent oldComponent, DJIBaseComponent newComponent) {
+
+            if(newComponent != null) {
+                newComponent.setDJIComponentListener(mDJIComponentListener);
+            }
+            notifyStatusChange();
+        }
+
+        @Override
+        public void onProductConnectivityChanged(boolean isConnected) {
+
+            notifyStatusChange();
+        }
+
+    };
+
+    private DJIBaseComponent.DJIComponentListener mDJIComponentListener = new DJIBaseComponent.DJIComponentListener() {
+
+        @Override
+        public void onComponentConnectivityChanged(boolean isConnected) {
+            notifyStatusChange();
+        }
+
+    };
+
+    private void notifyStatusChange() {
+        mHandler.removeCallbacks(updateRunnable);
+        mHandler.postDelayed(updateRunnable, 500);
+    }
+
+    private Runnable updateRunnable = new Runnable() {
+
+        @Override
+        public void run() {
+            Intent intent = new Intent(FLAG_CONNECTION_CHANGE);
+            sendBroadcast(intent);
+        }
+    };
+
+    private Handler mHandler;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.i(TAG, "called onCreate");
@@ -69,7 +145,73 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
+        ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.CAMERA, android.Manifest.permission.INTERNET,android.Manifest.permission.ACCESS_WIFI_STATE,android.Manifest.permission.WAKE_LOCK,android.Manifest.permission.ACCESS_COARSE_LOCATION,android.Manifest.permission.ACCESS_NETWORK_STATE,android.Manifest.permission.ACCESS_FINE_LOCATION,android.Manifest.permission.CHANGE_WIFI_STATE, android.Manifest.permission.MOUNT_UNMOUNT_FILESYSTEMS, android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.READ_EXTERNAL_STORAGE, android.Manifest.permission.SYSTEM_ALERT_WINDOW,android.Manifest.permission.READ_PHONE_STATE, android.Manifest.permission.BLUETOOTH, android.Manifest.permission.BLUETOOTH_ADMIN},1);
         getSupportActionBar().hide();
+
+        try{
+            SSLContext sslcontext = SSLContext.getInstance("TLSv1");
+            sslcontext.init(null,null,null);
+            SSLSocketFactory NoSSLV3Factory = new NoSSLv3SocketFactory(sslcontext.getSocketFactory());
+
+            HttpsURLConnection.setDefaultSSLSocketFactory(NoSSLV3Factory);
+
+        }
+        catch(Exception e){
+            Log.e(TAG, "THIS IS BAD");
+            showToast(e.toString());
+        }
+
+
+
+
+
+        mHandler = new Handler(Looper.getMainLooper());
+
+        mDJISDKManagerCallback = new DJISDKManager.DJISDKManagerCallback() {
+            @Override
+            public void onGetRegisteredResult(DJIError djiError) {
+                Log.d("TAG", djiError == null ? "success" : djiError.getDescription());
+                if(djiError == DJISDKError.REGISTRATION_SUCCESS){
+                    DJISDKManager.getInstance().startConnectionToProduct();
+                    showToast("Register succss");
+                    Log.e("TAG", "SHITS TIGHT YO");
+                }
+                else{
+                    showToast("Failed");
+                    Log.e("TAG", "HERE WE ARE "+ djiError.getDescription());
+                }
+
+                //DJISDKManager.getInstance().startConnectionToProduct();
+            }
+
+            @Override
+            public void onProductChanged(DJIBaseProduct djiBaseProduct, DJIBaseProduct djiBaseProduct1) {
+                mProduct = djiBaseProduct1;
+                if(mProduct != null){
+                    mProduct.setDJIBaseProductListener(mDJIBaseProductListener);
+                }
+                notifyStatusChange();
+            }
+        };
+
+
+        DJISDKManager.getInstance().initSDKManager(this, mDJISDKManagerCallback);
+        /*if(!DJISDKManager.getInstance().hasSDKRegistered()){
+            DJISDKManager.getInstance().registerApp();
+        }
+        */
+
+    /*s
+        DJIBaseProduct prod = DJISDKManager.getInstance().getDJIProduct();
+        mcontrol = ((DJIAircraft) prod).getFlightController();
+        mcontrol.takeOff(new DJICommonCallbacks.DJICompletionCallback() {
+            @Override
+            public void onResult(DJIError djiError) {
+
+            }
+        });
+    */
+
 
         mOpenCvCameraView = (JavaCameraView) findViewById(R.id.main_camera);
 
@@ -78,6 +220,7 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
 
 
     }
+
 
     public void showToast(final String toast)
     {
@@ -155,6 +298,7 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
                     mSubsequent += 1;
                     if(mSubsequent == 20){
                         showToast("stop");
+
                         mSubsequent = 0;
                     }
                 }
@@ -262,10 +406,10 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
     public void onResume() {
         super.onResume();
         if (!OpenCVLoader.initDebug()) {
-            Log.d(TAG, "internal opencv lib not found");
+            //Log.d(TAG, "internal opencv lib not found");
             OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_3_1_0, this, mLoaderCallback);
         } else {
-            Log.d(TAG, "lib found and using");
+            //Log.d(TAG, "lib found and using");
             mLoaderCallback.onManagerConnected(LoaderCallbackInterface.SUCCESS);
         }
     }

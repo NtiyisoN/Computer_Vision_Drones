@@ -12,20 +12,16 @@
         "source": "/home/zsmoore/programming/CSE321/Computer_Vision_Drones/android_development/DJI_Gesture_Control/dJISDKLIB/build/intermediates/bundles/debug/res/anim/core_zoom_exit_back.xml"
     },
     {
+        "merged": "/home/zsmoore/programming/CSE321/Computer_Vision_Drones/android_development/DJI_Gesture_Control/dJISDKLIB/build/intermediates/res/merged/androidTest/debug/anim/core_zoom_enter_back.xml",
+        "source": "/home/zsmoore/programming/CSE321/Computer_Vision_Drones/android_development/DJI_Gesture_Control/dJISDKLIB/build/intermediates/bundles/debug/res/anim/core_zoom_enter_back.xml"
+    },
+    {
         "merged": "/home/zsmoore/programming/CSE321/Computer_Vision_Drones/android_development/DJI_Gesture_Control/dJISDKLIB/build/intermediates/res/merged/androidTest/debug/anim/core_push_up_out.xml",
         "source": "/home/zsmoore/programming/CSE321/Computer_Vision_Drones/android_development/DJI_Gesture_Control/dJISDKLIB/build/intermediates/bundles/debug/res/anim/core_push_up_out.xml"
     },
     {
-        "merged": "/Users/noahpoczciwinski/Documents/software-development/drone-project/android_development/DJI_Gesture_Control/dJISDKLIB/build/intermediates/res/merged/androidTest/debug/anim/core_push_right_out.xml",
-        "source": "/Users/noahpoczciwinski/Documents/software-development/drone-project/android_development/DJI_Gesture_Control/dJISDKLIB/build/intermediates/bundles/debug/res/anim/core_push_right_out.xml"
-    },
-    {
         "merged": "/home/zsmoore/programming/CSE321/Computer_Vision_Drones/android_development/DJI_Gesture_Control/dJISDKLIB/build/intermediates/res/merged/androidTest/debug/anim/core_zoom_enter.xml",
         "source": "/home/zsmoore/programming/CSE321/Computer_Vision_Drones/android_development/DJI_Gesture_Control/dJISDKLIB/build/intermediates/bundles/debug/res/anim/core_zoom_enter.xml"
-    },
-    {
-        "merged": "/Users/noahpoczciwinski/Documents/software-development/drone-project/android_development/DJI_Gesture_Control/dJISDKLIB/build/intermediates/res/merged/androidTest/debug/anim/core_push_left_out.xml",
-        "source": "/Users/noahpoczciwinski/Documents/software-development/drone-project/android_development/DJI_Gesture_Control/dJISDKLIB/build/intermediates/bundles/debug/res/anim/core_push_left_out.xml"
     },
     {
         "merged": "/home/zsmoore/programming/CSE321/Computer_Vision_Drones/android_development/DJI_Gesture_Control/dJISDKLIB/build/intermediates/res/merged/androidTest/debug/anim/core_push_left_in.xml",
@@ -40,14 +36,6 @@
         "source": "/home/zsmoore/programming/CSE321/Computer_Vision_Drones/android_development/DJI_Gesture_Control/dJISDKLIB/build/intermediates/bundles/debug/res/anim/core_hold.xml"
     },
     {
-        "merged": "/Users/noahpoczciwinski/Documents/software-development/drone-project/android_development/DJI_Gesture_Control/dJISDKLIB/build/intermediates/res/merged/androidTest/debug/anim/core_push_right_in.xml",
-        "source": "/Users/noahpoczciwinski/Documents/software-development/drone-project/android_development/DJI_Gesture_Control/dJISDKLIB/build/intermediates/bundles/debug/res/anim/core_push_right_in.xml"
-    },
-    {
-        "merged": "/Users/noahpoczciwinski/Documents/software-development/drone-project/android_development/DJI_Gesture_Control/dJISDKLIB/build/intermediates/res/merged/androidTest/debug/anim/core_push_up_out.xml",
-        "source": "/Users/noahpoczciwinski/Documents/software-development/drone-project/android_development/DJI_Gesture_Control/dJISDKLIB/build/intermediates/bundles/debug/res/anim/core_push_up_out.xml"
-    },
-    {
         "merged": "/home/zsmoore/programming/CSE321/Computer_Vision_Drones/android_development/DJI_Gesture_Control/dJISDKLIB/build/intermediates/res/merged/androidTest/debug/anim/core_push_up_in.xml",
         "source": "/home/zsmoore/programming/CSE321/Computer_Vision_Drones/android_development/DJI_Gesture_Control/dJISDKLIB/build/intermediates/bundles/debug/res/anim/core_push_up_in.xml"
     },
@@ -60,55 +48,11 @@
         "source": "/home/zsmoore/programming/CSE321/Computer_Vision_Drones/android_development/DJI_Gesture_Control/dJISDKLIB/build/intermediates/bundles/debug/res/anim/core_zoom_exit.xml"
     },
     {
-        "merged": "/Users/noahpoczciwinski/Documents/software-development/drone-project/android_development/DJI_Gesture_Control/dJISDKLIB/build/intermediates/res/merged/androidTest/debug/anim/core_zoom_enter_back.xml",
-        "source": "/Users/noahpoczciwinski/Documents/software-development/drone-project/android_development/DJI_Gesture_Control/dJISDKLIB/build/intermediates/bundles/debug/res/anim/core_zoom_enter_back.xml"
-    },
-    {
-        "merged": "/Users/noahpoczciwinski/Documents/software-development/drone-project/android_development/DJI_Gesture_Control/dJISDKLIB/build/intermediates/res/merged/androidTest/debug/anim/core_zoom_exit_back.xml",
-        "source": "/Users/noahpoczciwinski/Documents/software-development/drone-project/android_development/DJI_Gesture_Control/dJISDKLIB/build/intermediates/bundles/debug/res/anim/core_zoom_exit_back.xml"
-    },
-    {
-        "merged": "/home/zsmoore/programming/CSE321/Computer_Vision_Drones/android_development/DJI_Gesture_Control/dJISDKLIB/build/intermediates/res/merged/androidTest/debug/anim/core_push_right_in.xml",
-        "source": "/home/zsmoore/programming/CSE321/Computer_Vision_Drones/android_development/DJI_Gesture_Control/dJISDKLIB/build/intermediates/bundles/debug/res/anim/core_push_right_in.xml"
-    },
-    {
         "merged": "/home/zsmoore/programming/CSE321/Computer_Vision_Drones/android_development/DJI_Gesture_Control/dJISDKLIB/build/intermediates/res/merged/androidTest/debug/anim/core_other.xml",
         "source": "/home/zsmoore/programming/CSE321/Computer_Vision_Drones/android_development/DJI_Gesture_Control/dJISDKLIB/build/intermediates/bundles/debug/res/anim/core_other.xml"
     },
     {
-        "merged": "/Users/noahpoczciwinski/Documents/software-development/drone-project/android_development/DJI_Gesture_Control/dJISDKLIB/build/intermediates/res/merged/androidTest/debug/anim/core_push_up_in.xml",
-        "source": "/Users/noahpoczciwinski/Documents/software-development/drone-project/android_development/DJI_Gesture_Control/dJISDKLIB/build/intermediates/bundles/debug/res/anim/core_push_up_in.xml"
-    },
-    {
-        "merged": "/Users/noahpoczciwinski/Documents/software-development/drone-project/android_development/DJI_Gesture_Control/dJISDKLIB/build/intermediates/res/merged/androidTest/debug/anim/core_hyperspace_in.xml",
-        "source": "/Users/noahpoczciwinski/Documents/software-development/drone-project/android_development/DJI_Gesture_Control/dJISDKLIB/build/intermediates/bundles/debug/res/anim/core_hyperspace_in.xml"
-    },
-    {
-        "merged": "/home/zsmoore/programming/CSE321/Computer_Vision_Drones/android_development/DJI_Gesture_Control/dJISDKLIB/build/intermediates/res/merged/androidTest/debug/anim/core_zoom_enter_back.xml",
-        "source": "/home/zsmoore/programming/CSE321/Computer_Vision_Drones/android_development/DJI_Gesture_Control/dJISDKLIB/build/intermediates/bundles/debug/res/anim/core_zoom_enter_back.xml"
-    },
-    {
-        "merged": "/Users/noahpoczciwinski/Documents/software-development/drone-project/android_development/DJI_Gesture_Control/dJISDKLIB/build/intermediates/res/merged/androidTest/debug/anim/core_push_left_in.xml",
-        "source": "/Users/noahpoczciwinski/Documents/software-development/drone-project/android_development/DJI_Gesture_Control/dJISDKLIB/build/intermediates/bundles/debug/res/anim/core_push_left_in.xml"
-    },
-    {
-        "merged": "/Users/noahpoczciwinski/Documents/software-development/drone-project/android_development/DJI_Gesture_Control/dJISDKLIB/build/intermediates/res/merged/androidTest/debug/anim/core_zoom_exit.xml",
-        "source": "/Users/noahpoczciwinski/Documents/software-development/drone-project/android_development/DJI_Gesture_Control/dJISDKLIB/build/intermediates/bundles/debug/res/anim/core_zoom_exit.xml"
-    },
-    {
-        "merged": "/Users/noahpoczciwinski/Documents/software-development/drone-project/android_development/DJI_Gesture_Control/dJISDKLIB/build/intermediates/res/merged/androidTest/debug/anim/core_hold.xml",
-        "source": "/Users/noahpoczciwinski/Documents/software-development/drone-project/android_development/DJI_Gesture_Control/dJISDKLIB/build/intermediates/bundles/debug/res/anim/core_hold.xml"
-    },
-    {
-        "merged": "/Users/noahpoczciwinski/Documents/software-development/drone-project/android_development/DJI_Gesture_Control/dJISDKLIB/build/intermediates/res/merged/androidTest/debug/anim/core_other.xml",
-        "source": "/Users/noahpoczciwinski/Documents/software-development/drone-project/android_development/DJI_Gesture_Control/dJISDKLIB/build/intermediates/bundles/debug/res/anim/core_other.xml"
-    },
-    {
-        "merged": "/Users/noahpoczciwinski/Documents/software-development/drone-project/android_development/DJI_Gesture_Control/dJISDKLIB/build/intermediates/res/merged/androidTest/debug/anim/core_zoom_enter.xml",
-        "source": "/Users/noahpoczciwinski/Documents/software-development/drone-project/android_development/DJI_Gesture_Control/dJISDKLIB/build/intermediates/bundles/debug/res/anim/core_zoom_enter.xml"
-    },
-    {
-        "merged": "/Users/noahpoczciwinski/Documents/software-development/drone-project/android_development/DJI_Gesture_Control/dJISDKLIB/build/intermediates/res/merged/androidTest/debug/anim/core_hyperspace_out.xml",
-        "source": "/Users/noahpoczciwinski/Documents/software-development/drone-project/android_development/DJI_Gesture_Control/dJISDKLIB/build/intermediates/bundles/debug/res/anim/core_hyperspace_out.xml"
+        "merged": "/home/zsmoore/programming/CSE321/Computer_Vision_Drones/android_development/DJI_Gesture_Control/dJISDKLIB/build/intermediates/res/merged/androidTest/debug/anim/core_push_right_in.xml",
+        "source": "/home/zsmoore/programming/CSE321/Computer_Vision_Drones/android_development/DJI_Gesture_Control/dJISDKLIB/build/intermediates/bundles/debug/res/anim/core_push_right_in.xml"
     }
 ]
