@@ -95,82 +95,7 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
     };
 
 
-    public MainActivity() {
-        Log.i(TAG, "Instantiated new" + this.getClass());
-        java.lang.System.setProperty("https.protocols", "TLSv1");
-
-    }
-
-    private DJISDKManager.DJISDKManagerCallback mDJISDKManagerCallback = new DJISDKManager.DJISDKManagerCallback() {
-        @Override
-        public void onGetRegisteredResult(DJIError djiError) {
-            //Log.d("TAG", djiError == null ? "success" : djiError.getDescription());
-            if(djiError == DJISDKError.REGISTRATION_SUCCESS){
-                DJISDKManager.getInstance().startConnectionToProduct();
-                //showToast("Register succss");
-                Log.e("TAG", "SHITS TIGHT YO");
-            }
-            else{
-                Log.e("TAG", "SDK REGISTRATION STATEL " + djiError.getDescription());
-                showToast("maybe bad");
-                //showToast("Failed");
-                //Log.e("TAG", "HERE WE ARE "+ djiError.getDescription());
-            }
-
-            //DJISDKManager.getInstance().startConnectionToProduct();
-        }
-
-        @Override
-        public void onProductChanged(DJIBaseProduct djiBaseProduct, DJIBaseProduct djiBaseProduct1) {
-            mProduct = djiBaseProduct1;
-            if(mProduct != null){
-                mProduct.setDJIBaseProductListener(mDJIBaseProductListener);
-            }
-            notifyStatusChange();
-        }
-    };
-
-    private DJIBaseProduct.DJIBaseProductListener mDJIBaseProductListener = new DJIBaseProduct.DJIBaseProductListener() {
-
-        @Override
-        public void onComponentChange(DJIBaseProduct.DJIComponentKey key, DJIBaseComponent oldComponent, DJIBaseComponent newComponent) {
-
-            if(newComponent != null) {
-                newComponent.setDJIComponentListener(mDJIComponentListener);
-            }
-            notifyStatusChange();
-        }
-
-        @Override
-        public void onProductConnectivityChanged(boolean isConnected) {
-
-            notifyStatusChange();
-        }
-
-    };
-
-    private DJIBaseComponent.DJIComponentListener mDJIComponentListener = new DJIBaseComponent.DJIComponentListener() {
-
-        @Override
-        public void onComponentConnectivityChanged(boolean isConnected) {
-            notifyStatusChange();
-        }
-
-    };
-
-    private void notifyStatusChange() {
-        mHandler.removeCallbacks(updateRunnable);
-        mHandler.postDelayed(updateRunnable, 500);
-    }
-
-    private Runnable updateRunnable = new Runnable() {
-
-        @Override
-        public void run() {
-            Intent intent = new Intent(FLAG_CONNECTION_CHANGE);
-            sendBroadcast(intent);
-        }
-    };
+    public MainActivity() {Log.i(TAG, "Instantiated new" + this.getClass());}
 
     private Handler mHandler;
     @Override
@@ -182,9 +107,8 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
         setContentView(R.layout.activity_main);
         ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.CAMERA, android.Manifest.permission.INTERNET,android.Manifest.permission.ACCESS_WIFI_STATE,android.Manifest.permission.WAKE_LOCK,android.Manifest.permission.ACCESS_COARSE_LOCATION,android.Manifest.permission.ACCESS_NETWORK_STATE,android.Manifest.permission.ACCESS_FINE_LOCATION,android.Manifest.permission.CHANGE_WIFI_STATE, android.Manifest.permission.MOUNT_UNMOUNT_FILESYSTEMS, android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.READ_EXTERNAL_STORAGE, android.Manifest.permission.SYSTEM_ALERT_WINDOW,android.Manifest.permission.READ_PHONE_STATE, android.Manifest.permission.BLUETOOTH, android.Manifest.permission.BLUETOOTH_ADMIN},1);
         getSupportActionBar().hide();
-        java.lang.System.setProperty("https.protocols", "TLSv1");
 
-        try{
+        /*try{
             SSLContext sslcontext = SSLContext.getInstance("TLSv1");
             sslcontext.init(null,null,null);
             SSLSocketFactory NoSSLV3Factory = new NoSSLv3SocketFactory(sslcontext.getSocketFactory());
@@ -199,31 +123,11 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
         catch(Exception e){
             Log.e("TAG","bad");
             showToast(e.toString());
-        }
-
-
-
-
+        }*/
 
         mHandler = new Handler(Looper.getMainLooper());
-
-
-
-
         DJISDKManager.getInstance().initSDKManager(this, mDJISDKManagerCallback);
-        //if(!DJISDKManager.getInstance().hasSDKRegistered()){
-            DJISDKManager.getInstance().registerApp();
-        //}
-        DJISDKManager.getInstance().registerApp();
-        DJISDKManager.getInstance().registerApp();
-        DJISDKManager.getInstance().registerApp();
-        DJISDKManager.getInstance().registerApp();
-        DJISDKManager.getInstance().registerApp();
 
-
-        if(!DJISDKManager.getInstance().hasSDKRegistered()){
-            showToast("GRESAT");
-        }
 
     /*s
         DJIBaseProduct prod = DJISDKManager.getInstance().getDJIProduct();
@@ -244,6 +148,74 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
 
 
     }
+
+
+    private DJISDKManager.DJISDKManagerCallback mDJISDKManagerCallback = new DJISDKManager.DJISDKManagerCallback() {
+        @Override
+        public void onGetRegisteredResult(DJIError error) {
+            Log.d(TAG, error == null ? "success" : error.getDescription());
+            if(error == DJISDKError.REGISTRATION_SUCCESS) {
+                DJISDKManager.getInstance().startConnectionToProduct();
+                Handler handler = new Handler(Looper.getMainLooper());
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getApplicationContext(), "Register App Successful", Toast.LENGTH_LONG).show();
+                    }
+                });
+            } else {
+                Handler handler = new Handler(Looper.getMainLooper());
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getApplicationContext(), "Register App Failed! Please enter your App Key and check the network.", Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+            Log.e("TAG", error.toString());
+        }
+
+        @Override
+        public void onProductChanged(DJIBaseProduct oldProduct, DJIBaseProduct newProduct) {
+            mProduct = newProduct;
+            if(mProduct != null) {
+                mProduct.setDJIBaseProductListener(mDJIBaseProductListener);
+            }
+            notifyStatusChange();
+        }
+    };
+
+
+    private DJIBaseProduct.DJIBaseProductListener mDJIBaseProductListener = new DJIBaseProduct.DJIBaseProductListener() {
+        @Override
+        public void onComponentChange(DJIBaseProduct.DJIComponentKey key, DJIBaseComponent oldComponent, DJIBaseComponent newComponent) {
+            if(newComponent != null) {
+                newComponent.setDJIComponentListener(mDJIComponentListener);
+            }
+            notifyStatusChange();
+        }
+        @Override
+        public void onProductConnectivityChanged(boolean isConnected) {
+            notifyStatusChange();
+        }
+    };
+    private DJIBaseComponent.DJIComponentListener mDJIComponentListener = new DJIBaseComponent.DJIComponentListener() {
+        @Override
+        public void onComponentConnectivityChanged(boolean isConnected) {
+            notifyStatusChange();
+        }
+    };
+    private void notifyStatusChange() {
+        mHandler.removeCallbacks(updateRunnable);
+        mHandler.postDelayed(updateRunnable, 500);
+    }
+    private Runnable updateRunnable = new Runnable() {
+        @Override
+        public void run() {
+            Intent intent = new Intent(FLAG_CONNECTION_CHANGE);
+            sendBroadcast(intent);
+        }
+    };
 
 
     public void showToast(final String toast)
