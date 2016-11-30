@@ -1,6 +1,9 @@
 package com.zachary_moore.dji_gesture_control;
 
 
+import android.app.Activity;
+import android.app.Application;
+import android.app.ApplicationErrorReport;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
@@ -11,6 +14,7 @@ import android.util.Log;
 import android.view.SurfaceView;
 import android.view.WindowManager;
 import android.widget.Toast;
+
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -42,6 +46,7 @@ import org.opencv.imgproc.Imgproc;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLEngine;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 
@@ -51,6 +56,8 @@ import dji.sdk.base.DJIBaseComponent;
 import dji.sdk.base.DJIBaseProduct;
 import dji.sdk.flightcontroller.DJIFlightController;
 import dji.sdk.sdkmanager.DJISDKManager;
+
+
 
 public class MainActivity extends AppCompatActivity implements CameraBridgeViewBase.CvCameraViewListener2 {
 
@@ -90,10 +97,38 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
 
     public MainActivity() {
         Log.i(TAG, "Instantiated new" + this.getClass());
+        java.lang.System.setProperty("https.protocols", "TLSv1");
 
     }
 
-    private DJISDKManager.DJISDKManagerCallback mDJISDKManagerCallback;
+    private DJISDKManager.DJISDKManagerCallback mDJISDKManagerCallback = new DJISDKManager.DJISDKManagerCallback() {
+        @Override
+        public void onGetRegisteredResult(DJIError djiError) {
+            //Log.d("TAG", djiError == null ? "success" : djiError.getDescription());
+            if(djiError == DJISDKError.REGISTRATION_SUCCESS){
+                DJISDKManager.getInstance().startConnectionToProduct();
+                //showToast("Register succss");
+                Log.e("TAG", "SHITS TIGHT YO");
+            }
+            else{
+                Log.e("TAG", "SDK REGISTRATION STATEL " + djiError.getDescription());
+                showToast("maybe bad");
+                //showToast("Failed");
+                //Log.e("TAG", "HERE WE ARE "+ djiError.getDescription());
+            }
+
+            //DJISDKManager.getInstance().startConnectionToProduct();
+        }
+
+        @Override
+        public void onProductChanged(DJIBaseProduct djiBaseProduct, DJIBaseProduct djiBaseProduct1) {
+            mProduct = djiBaseProduct1;
+            if(mProduct != null){
+                mProduct.setDJIBaseProductListener(mDJIBaseProductListener);
+            }
+            notifyStatusChange();
+        }
+    };
 
     private DJIBaseProduct.DJIBaseProductListener mDJIBaseProductListener = new DJIBaseProduct.DJIBaseProductListener() {
 
@@ -147,17 +182,22 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
         setContentView(R.layout.activity_main);
         ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.CAMERA, android.Manifest.permission.INTERNET,android.Manifest.permission.ACCESS_WIFI_STATE,android.Manifest.permission.WAKE_LOCK,android.Manifest.permission.ACCESS_COARSE_LOCATION,android.Manifest.permission.ACCESS_NETWORK_STATE,android.Manifest.permission.ACCESS_FINE_LOCATION,android.Manifest.permission.CHANGE_WIFI_STATE, android.Manifest.permission.MOUNT_UNMOUNT_FILESYSTEMS, android.Manifest.permission.WRITE_EXTERNAL_STORAGE, android.Manifest.permission.READ_EXTERNAL_STORAGE, android.Manifest.permission.SYSTEM_ALERT_WINDOW,android.Manifest.permission.READ_PHONE_STATE, android.Manifest.permission.BLUETOOTH, android.Manifest.permission.BLUETOOTH_ADMIN},1);
         getSupportActionBar().hide();
+        java.lang.System.setProperty("https.protocols", "TLSv1");
 
         try{
             SSLContext sslcontext = SSLContext.getInstance("TLSv1");
             sslcontext.init(null,null,null);
             SSLSocketFactory NoSSLV3Factory = new NoSSLv3SocketFactory(sslcontext.getSocketFactory());
 
+
+
             HttpsURLConnection.setDefaultSSLSocketFactory(NoSSLV3Factory);
+
+            Log.e("TAG", "GOOD");
 
         }
         catch(Exception e){
-            Log.e(TAG, "THIS IS BAD");
+            Log.e("TAG","bad");
             showToast(e.toString());
         }
 
@@ -167,39 +207,23 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
 
         mHandler = new Handler(Looper.getMainLooper());
 
-        mDJISDKManagerCallback = new DJISDKManager.DJISDKManagerCallback() {
-            @Override
-            public void onGetRegisteredResult(DJIError djiError) {
-                Log.d("TAG", djiError == null ? "success" : djiError.getDescription());
-                if(djiError == DJISDKError.REGISTRATION_SUCCESS){
-                    DJISDKManager.getInstance().startConnectionToProduct();
-                    showToast("Register succss");
-                    Log.e("TAG", "SHITS TIGHT YO");
-                }
-                else{
-                    showToast("Failed");
-                    Log.e("TAG", "HERE WE ARE "+ djiError.getDescription());
-                }
 
-                //DJISDKManager.getInstance().startConnectionToProduct();
-            }
-
-            @Override
-            public void onProductChanged(DJIBaseProduct djiBaseProduct, DJIBaseProduct djiBaseProduct1) {
-                mProduct = djiBaseProduct1;
-                if(mProduct != null){
-                    mProduct.setDJIBaseProductListener(mDJIBaseProductListener);
-                }
-                notifyStatusChange();
-            }
-        };
 
 
         DJISDKManager.getInstance().initSDKManager(this, mDJISDKManagerCallback);
-        /*if(!DJISDKManager.getInstance().hasSDKRegistered()){
+        //if(!DJISDKManager.getInstance().hasSDKRegistered()){
             DJISDKManager.getInstance().registerApp();
+        //}
+        DJISDKManager.getInstance().registerApp();
+        DJISDKManager.getInstance().registerApp();
+        DJISDKManager.getInstance().registerApp();
+        DJISDKManager.getInstance().registerApp();
+        DJISDKManager.getInstance().registerApp();
+
+
+        if(!DJISDKManager.getInstance().hasSDKRegistered()){
+            showToast("GRESAT");
         }
-        */
 
     /*s
         DJIBaseProduct prod = DJISDKManager.getInstance().getDJIProduct();
@@ -234,6 +258,7 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
 
     public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
         mRgba = inputFrame.gray();
+
         Mat rep2 = new Mat();
         Mat contours = new Mat();
         List<MatOfPoint> cont = new ArrayList<MatOfPoint>();
