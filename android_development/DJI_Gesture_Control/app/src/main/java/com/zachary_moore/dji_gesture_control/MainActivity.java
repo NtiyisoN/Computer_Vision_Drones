@@ -172,7 +172,7 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
                     }
                 });
             }
-            Log.e("TAG", error.toString());
+            Log.e("TAG", error.getDescription());
         }
 
         @Override
