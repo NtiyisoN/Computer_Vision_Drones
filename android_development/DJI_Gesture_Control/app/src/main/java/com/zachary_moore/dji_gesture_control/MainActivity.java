@@ -52,9 +52,11 @@ import javax.net.ssl.SSLSocketFactory;
 
 import dji.common.error.DJIError;
 import dji.common.error.DJISDKError;
+import dji.common.util.DJICommonCallbacks;
 import dji.sdk.base.DJIBaseComponent;
 import dji.sdk.base.DJIBaseProduct;
 import dji.sdk.flightcontroller.DJIFlightController;
+import dji.sdk.products.DJIAircraft;
 import dji.sdk.sdkmanager.DJISDKManager;
 
 
@@ -129,7 +131,7 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
         DJISDKManager.getInstance().initSDKManager(this, mDJISDKManagerCallback);
 
 
-    /*s
+        /*
         DJIBaseProduct prod = DJISDKManager.getInstance().getDJIProduct();
         mcontrol = ((DJIAircraft) prod).getFlightController();
         mcontrol.takeOff(new DJICommonCallbacks.DJICompletionCallback() {
@@ -137,8 +139,8 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
             public void onResult(DJIError djiError) {
 
             }
-        });
-    */
+        });*/
+
 
 
         mOpenCvCameraView = (JavaCameraView) findViewById(R.id.main_camera);
