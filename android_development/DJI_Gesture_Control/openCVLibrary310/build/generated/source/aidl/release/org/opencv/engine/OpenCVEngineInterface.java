@@ -1,6 +1,6 @@
 /*
  * This file is auto-generated.  DO NOT MODIFY.
- * Original file: /home/zsmoore/programming/CSE321/Computer_Vision_Drones/android_development/DJI_Gesture_Control/openCVLibrary310/src/main/aidl/org/opencv/engine/OpenCVEngineInterface.aidl
+ * Original file: /Users/noahpoczciwinski/Documents/software-development/drone-project/android_development/DJI_Gesture_Control/openCVLibrary310/src/main/aidl/org/opencv/engine/OpenCVEngineInterface.aidl
  */
 package org.opencv.engine;
 /**

@@ -52,6 +52,7 @@ import javax.net.ssl.SSLSocketFactory;
 
 import dji.common.error.DJIError;
 import dji.common.error.DJISDKError;
+import dji.common.flightcontroller.DJIVirtualStickFlightControlData;
 import dji.common.util.DJICommonCallbacks;
 import dji.sdk.base.DJIBaseComponent;
 import dji.sdk.base.DJIBaseProduct;
@@ -73,6 +74,8 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
     private int mCommand = 0;
     private DJIBaseProduct mProduct;
     private DJIFlightController mcontrol;
+
+    private boolean mFlightCommandReady = false;
 
     static {
         System.loadLibrary("opencv_java3");
@@ -131,15 +134,6 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
         DJISDKManager.getInstance().initSDKManager(this, mDJISDKManagerCallback);
 
 
-        /*
-        DJIBaseProduct prod = DJISDKManager.getInstance().getDJIProduct();
-        mcontrol = ((DJIAircraft) prod).getFlightController();
-        mcontrol.takeOff(new DJICommonCallbacks.DJICompletionCallback() {
-            @Override
-            public void onResult(DJIError djiError) {
-
-            }
-        });*/
 
 
 
@@ -182,6 +176,24 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
             mProduct = newProduct;
             if(mProduct != null) {
                 mProduct.setDJIBaseProductListener(mDJIBaseProductListener);
+
+                mFlightCommandReady = true;
+
+                DJIBaseProduct prod = DJISDKManager.getInstance().getDJIProduct();
+                mcontrol = ((DJIAircraft) prod).getFlightController();
+                mcontrol.enableVirtualStickControlMode(new DJICommonCallbacks.DJICompletionCallback() {
+                    @Override
+                    public void onResult(DJIError djiError) {
+
+                    }
+                });
+                mcontrol.takeOff(new DJICommonCallbacks.DJICompletionCallback() {
+                    @Override
+                    public void onResult(DJIError djiError) {
+
+                    }
+                });
+
             }
             notifyStatusChange();
         }
@@ -231,6 +243,9 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
     }
 
     public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
+
+//        Log.e("TAG", "mProduct connected: " + mProduct.isConnected());
+
         mRgba = inputFrame.gray();
 
         Mat rep2 = new Mat();
@@ -291,94 +306,132 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
 
         }
 
-        switch (command) {
-            case 0:
-                if(mCommand == 0){
-                    mSubsequent += 1;
-                    if(mSubsequent == 20){
-                        showToast("stop");
+        int frameDelay = 5;
 
-                        mSubsequent = 0;
+        if (mFlightCommandReady) {
+
+            switch (command) {
+                case 0:
+                    if (mCommand == 0) {
+                        mSubsequent += 1;
+                        if (mSubsequent == frameDelay) {
+                            showToast("down");
+//
+//                            mcontrol.sendVirtualStickFlightControlData(new DJIVirtualStickFlightControlData(0, 1, 0, 0), new DJICommonCallbacks.DJICompletionCallback() {
+//                                @Override
+//                                public void onResult(DJIError djiError) {
+//
+//                                }
+//                            });
+                            mSubsequent = 0;
+                        }
+                    } else {
+                        mSubsequent = 1;
+                        mCommand = 0;
                     }
-                }
-                else{
-                    mSubsequent = 1;
-                    mCommand = 0;
-                }
-                //Stop
+                    //Stop
 
-                //showToast((Integer.toString(command)));
+                    //showToast((Integer.toString(command)));
 
-                break;
+                    break;
 
 
-            case 1:
-                //Down
-                //showToast("down");
-                //showToast((Integer.toString(command)));
-                if(mCommand == 1){
-                    mSubsequent += 1;
-                    if(mSubsequent == 20){
-                        showToast("down");
-                        mSubsequent = 0;
+                case 1:
+                    //Down
+                    //showToast("down");
+                    //showToast((Integer.toString(command)));
+                    if (mCommand == 1) {
+                        mSubsequent += 1;
+                        if (mSubsequent == frameDelay) {
+
+                            showToast("stop");
+
+                            mcontrol.autoLanding(new DJICommonCallbacks.DJICompletionCallback() {
+                                @Override
+                                public void onResult(DJIError djiError) {
+
+                                }
+                            });
+                            mSubsequent = 0;
+                        }
+                    } else {
+                        mSubsequent = 1;
+                        mCommand = 1;
                     }
-                }
-                else{
-                    mSubsequent = 1;
-                    mCommand = 1;
-                }
-                break;
+                    break;
 
-            case 2:
-                //left
-                //showToast("left");
-                //showToast((Integer.toString(command)));
-                if(mCommand == 2){
-                    mSubsequent += 1;
-                    if(mSubsequent == 20){
-                        showToast("left");
-                        mSubsequent = 0;
+                case 2:
+                    //left
+                    //showToast("left");
+                    //showToast((Integer.toString(command)));
+                    if (mCommand == 2) {
+                        mSubsequent += 1;
+                        if (mSubsequent == frameDelay) {
+//                            mcontrol.sendVirtualStickFlightControlData(new DJIVirtualStickFlightControlData(0, 1, 0, 0), new DJICommonCallbacks.DJICompletionCallback() {
+//                                @Override
+//                                public void onResult(DJIError djiError) {
+//
+//                                }
+//                            });
+                            showToast("left");
+                            mSubsequent = 0;
+                        }
+                    } else {
+                        mSubsequent = 1;
+                        mCommand = 2;
                     }
-                }
-                else{
-                    mSubsequent = 1;
-                    mCommand = 2;
-                }
-                break;
+                    break;
 
-            case 3:
-                //right
-                //showToast("right");
-                //showToast((Integer.toString(command)));
-                if(mCommand == 3){
-                    mSubsequent += 1;
-                    if(mSubsequent == 20){
-                        showToast("right");
-                        mSubsequent = 0;
+                case 3:
+                    //right
+                    //showToast("right");
+                    //showToast((Integer.toString(command)));
+                    if (mCommand == 3) {
+                        mSubsequent += 1;
+                        if (mSubsequent == frameDelay) {
+                            showToast("right");
+//                            mcontrol.sendVirtualStickFlightControlData(new DJIVirtualStickFlightControlData(0, 1, 0, 0), new DJICommonCallbacks.DJICompletionCallback() {
+//                                @Override
+//                                public void onResult(DJIError djiError) {
+//
+//                                }
+//                            });
+                            mSubsequent = 0;
+                        }
+                    } else {
+                        mSubsequent = 1;
+                        mCommand = 3;
                     }
-                }
-                else{
-                    mSubsequent = 1;
-                    mCommand = 3;
-                }
-                break;
+                    break;
 
-            case 4:
-                //UP
-                //showToast("up");
-                //showToast((Integer.toString(command)));
-                if(mCommand == 4){
-                    mSubsequent += 1;
-                    if(mSubsequent == 20){
-                        showToast("Up");
-                        mSubsequent = 0;
+                case 4:
+                    //UP
+                    //showToast("up");
+                    //showToast((Integer.toString(command)));
+                    if (mCommand == 4) {
+                        mSubsequent += 1;
+                        if (mSubsequent == frameDelay) {
+                            showToast("Take Off");
+                            mcontrol.takeOff(new DJICommonCallbacks.DJICompletionCallback() {
+                                @Override
+                                public void onResult(DJIError djiError) {
+
+                                }
+                            });
+//                            mcontrol.sendVirtualStickFlightControlData(new DJIVirtualStickFlightControlData(0, 1, 0, 0), new DJICommonCallbacks.DJICompletionCallback() {
+//                                @Override
+//                                public void onResult(DJIError djiError) {
+//
+//                                }
+//                            });
+                            mSubsequent = 0;
+                        }
+                    } else {
+                        mSubsequent = 1;
+                        mCommand = 4;
                     }
-                }
-                else{
-                    mSubsequent = 1;
-                    mCommand = 4;
-                }
-                break;
+                    break;
+            }
         }
 
         return mRgba;

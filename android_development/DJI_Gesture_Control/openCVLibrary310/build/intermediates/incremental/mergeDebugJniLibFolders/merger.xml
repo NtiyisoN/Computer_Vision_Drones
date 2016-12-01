@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger version="3"><dataSet config="main"><source path="/Users/noahpoczciwinski/Documents/software-development/drone-project/android_development/DJI_Gesture_Control/openCVLibrary310/src/main/jniLibs"/></dataSet><dataSet config="debug"><source path="/Users/noahpoczciwinski/Documents/software-development/drone-project/android_development/DJI_Gesture_Control/openCVLibrary310/src/debug/jniLibs"/></dataSet></merger>
