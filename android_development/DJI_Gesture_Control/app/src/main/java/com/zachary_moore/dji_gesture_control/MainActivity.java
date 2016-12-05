@@ -237,7 +237,7 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
         runOnUiThread(new Runnable() {
             public void run()
             {
-                Toast.makeText(MainActivity.this, toast, Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, toast, Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -306,7 +306,7 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
 
         }
 
-        int frameDelay = 5;
+        int frameDelay = 20;
 
         if (mFlightCommandReady) {
 
@@ -315,7 +315,7 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
                     if (mCommand == 0) {
                         mSubsequent += 1;
                         if (mSubsequent == frameDelay) {
-                            showToast("down");
+                            showToast("0 fingers - NOP");
 //
 //                            mcontrol.sendVirtualStickFlightControlData(new DJIVirtualStickFlightControlData(0, 1, 0, 0), new DJICommonCallbacks.DJICompletionCallback() {
 //                                @Override
@@ -343,15 +343,7 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
                     if (mCommand == 1) {
                         mSubsequent += 1;
                         if (mSubsequent == frameDelay) {
-
-                            showToast("stop");
-
-                            mcontrol.autoLanding(new DJICommonCallbacks.DJICompletionCallback() {
-                                @Override
-                                public void onResult(DJIError djiError) {
-
-                                }
-                            });
+                            showToast("1 fingers - NOP");
                             mSubsequent = 0;
                         }
                     } else {
@@ -367,6 +359,7 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
                     if (mCommand == 2) {
                         mSubsequent += 1;
                         if (mSubsequent == frameDelay) {
+                            showToast("2 fingers - NOP");
 //                            mcontrol.sendVirtualStickFlightControlData(new DJIVirtualStickFlightControlData(0, 1, 0, 0), new DJICommonCallbacks.DJICompletionCallback() {
 //                                @Override
 //                                public void onResult(DJIError djiError) {
@@ -389,7 +382,7 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
                     if (mCommand == 3) {
                         mSubsequent += 1;
                         if (mSubsequent == frameDelay) {
-                            showToast("right");
+                            showToast("3 fingers - NOP");
 //                            mcontrol.sendVirtualStickFlightControlData(new DJIVirtualStickFlightControlData(0, 1, 0, 0), new DJICommonCallbacks.DJICompletionCallback() {
 //                                @Override
 //                                public void onResult(DJIError djiError) {
@@ -411,19 +404,14 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
                     if (mCommand == 4) {
                         mSubsequent += 1;
                         if (mSubsequent == frameDelay) {
-                            showToast("Take Off");
-                            mcontrol.takeOff(new DJICommonCallbacks.DJICompletionCallback() {
+                            showToast("4 fingers - land");
+
+                            mcontrol.autoLanding(new DJICommonCallbacks.DJICompletionCallback() {
                                 @Override
                                 public void onResult(DJIError djiError) {
 
                                 }
                             });
-//                            mcontrol.sendVirtualStickFlightControlData(new DJIVirtualStickFlightControlData(0, 1, 0, 0), new DJICommonCallbacks.DJICompletionCallback() {
-//                                @Override
-//                                public void onResult(DJIError djiError) {
-//
-//                                }
-//                            });
                             mSubsequent = 0;
                         }
                     } else {
