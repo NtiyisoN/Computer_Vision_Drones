@@ -315,7 +315,7 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
                     if (mCommand == 0) {
                         mSubsequent += 1;
                         if (mSubsequent == frameDelay) {
-                            showToast("0 fingers - NOP");
+                            showToast("0 convex-defects - NOP");
 //
 //                            mcontrol.sendVirtualStickFlightControlData(new DJIVirtualStickFlightControlData(0, 1, 0, 0), new DJICommonCallbacks.DJICompletionCallback() {
 //                                @Override
@@ -343,7 +343,7 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
                     if (mCommand == 1) {
                         mSubsequent += 1;
                         if (mSubsequent == frameDelay) {
-                            showToast("1 fingers - NOP");
+                            showToast("1 convex-defects - NOP");
                             mSubsequent = 0;
                         }
                     } else {
@@ -359,7 +359,7 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
                     if (mCommand == 2) {
                         mSubsequent += 1;
                         if (mSubsequent == frameDelay) {
-                            showToast("2 fingers - NOP");
+                            showToast("2 convex-defects - NOP");
 //                            mcontrol.sendVirtualStickFlightControlData(new DJIVirtualStickFlightControlData(0, 1, 0, 0), new DJICommonCallbacks.DJICompletionCallback() {
 //                                @Override
 //                                public void onResult(DJIError djiError) {
@@ -382,7 +382,7 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
                     if (mCommand == 3) {
                         mSubsequent += 1;
                         if (mSubsequent == frameDelay) {
-                            showToast("3 fingers - NOP");
+                            showToast("3 convex-defects - NOP");
 //                            mcontrol.sendVirtualStickFlightControlData(new DJIVirtualStickFlightControlData(0, 1, 0, 0), new DJICommonCallbacks.DJICompletionCallback() {
 //                                @Override
 //                                public void onResult(DJIError djiError) {
@@ -404,7 +404,7 @@ public class MainActivity extends AppCompatActivity implements CameraBridgeViewB
                     if (mCommand == 4) {
                         mSubsequent += 1;
                         if (mSubsequent == frameDelay) {
-                            showToast("4 fingers - land");
+                            showToast("4 convex-defects - land");
 
                             mcontrol.autoLanding(new DJICommonCallbacks.DJICompletionCallback() {
                                 @Override
